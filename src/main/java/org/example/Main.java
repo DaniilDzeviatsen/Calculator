@@ -15,26 +15,20 @@ public class Main {
         calc(input);
     }
 
-    public static boolean isAppropriateArabic(char a, char b) {
-        boolean isArabic = false;
-        if (a >= 'I' && a <= 'X' && b >= 'I' && b <= 'X') {
-            isArabic = true;
-        } else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
-        return isArabic;
-    }
-
     public static boolean isAppropriateRomanian(char a, char b) {
         boolean isRomanian = false;
-        if (a >= 1 && a <= 10 && b >= 1 && b <= 10) {
+        if (a >= 'I' && a <= 'X' && b >= 'I' && b <= 'X') {
             isRomanian = true;
         } else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
         return isRomanian;
     }
 
-    public static boolean isAppropriateStr(String input) {
-        String finalString = input.trim().replaceAll("\\s+", " ");
-        Pattern pattern = Pattern.compile("");
-        return true;
+    public static boolean isAppropriateArabic(int a, int b) {
+        boolean isArabic = false;
+        if (a >= 1 && a <= 10 && b >= 1 && b <= 10) {
+            isArabic = true;
+        } else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
+        return isArabic;
     }
 
     public static int convertToArabic(String romanianNum) {
@@ -51,26 +45,22 @@ public class Main {
             case "X" -> 10;
             default -> throw new IllegalArgumentException("Числа не соответствуют требованиям");
         };
+        return arabicNum;
     }
 
 
     public static String calc(String input) {
+        //разделяем всю введенную строку на массив из 3х частей и проверяем валидность введенных данных
         String finalString = input.trim().replaceAll("\\s+", " ");
         String[] str = finalString.split(" ");
         if (str.length != 3) {
             throw new IllegalArgumentException("строка не соответствует требованиям");
         }
-        if (str[0].length() == 1 && str[2].length() == 1) {
-            char a = str[0].charAt(0);
-            char b = str[2].charAt(2);
-            if (isAppropriateArabic(a, b)) {
-
-            }
-        }
+        //калькулятор для арабских цифр и проверка на соответствие заданию (числа должны быть от 1 до 10)
         try {
             int a = Integer.parseInt(str[0]);
             int b = Integer.parseInt(str[2]);
-            if (a >= 0 && a <= 10 & b >= 0 && b <= 10) {
+            if (isAppropriateArabic(a, b)) {
                 int result = switch (str[1]) {
                     case "+" -> result = a + b;
                     case "-" -> result = a - b;
