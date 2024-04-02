@@ -58,6 +58,20 @@ public class Main {
         return arabicNum;
     }
 
+    public static String convertToRomanian(int a) {
+        String[] romNums = new String[]{"0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI",
+                "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII",
+                "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV",
+                "XXXV", "XXXVI", "XXXVII", "XXXVIII", "XXXIX", "XL", "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI",
+                "XLVII", "XLVIII", "XLIX", "L", "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX",
+                "LX", "LXI", "LXII", "LXIII", "LXIV", "LXV", "LXVI", "LXVII", "LXVIII", "LXIX", "LXX", "LXXI",
+                "LXXII", "LXXIII", "LXXIV", "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX", "LXXX", "LXXXI", "LXXXII",
+                "LXXXIII", "LXXXIV", "LXXXV", "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC", "XCI", "XCII", "XCIII",
+                "XCIV", "XCV", "XCVI", "XCVII", "XCVIII", "XCIX", "C"};
+        String romNum = romNums[a];
+        return romNum;
+    }
+
     public static int calculate(int a, int b, String c) {
         int result = switch (c) {
             case "+" -> a + b;
@@ -97,20 +111,22 @@ public class Main {
         int a;
         int b;
         int result = 0;
+        String resOfCalc;
         if (!isAppropriateRomanian(fNum) && !isAppropriateRomanian(sNum)) {
             a = Integer.parseInt(fNum);
             b = Integer.parseInt(sNum);
             if (isAppropriateArabic(a, b))
                 result = calculate(a, b, operator);
-
+            resOfCalc = String.valueOf(result);
         } else if (isAppropriateRomanian(fNum) && isAppropriateRomanian(sNum)) {
             a = convertToArabic(fNum);
             b = convertToArabic(sNum);
             result = calculate(a, b, operator);
             if (result < 1) throw new IllegalArgumentException("Римские числа не могут быть отрицателными");
-
+            resOfCalc=convertToRomanian(result);
         } else throw new IllegalArgumentException("Числа не соответствуют требованиям");
-        System.out.println(result);
-        return String.valueOf(result);
+
+        System.out.println(resOfCalc);
+        return resOfCalc;
     }
 }
