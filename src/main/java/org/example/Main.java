@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -32,13 +33,11 @@ public class Main {
         return romanianMap.containsKey(a) && romanianMap.containsKey(b);
     }
 
-    public static boolean isAppropriateArabic(String firstNum, String secondNum) {
-        int a = Integer.parseInt(firstNum);
-        int b = Integer.parseInt(secondNum);
+    public static boolean isAppropriateArabic(int a, int b) {
         boolean isArabic = false;
         if (a >= 1 && a <= 10 && b >= 1 && b <= 10) {
             isArabic = true;
-        } //else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
+        } else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
         return isArabic;
     }
 
@@ -58,7 +57,8 @@ public class Main {
         };
         return arabicNum;
     }
-    public static int calculate(int a, int b, String c){
+
+    public static int calculate(int a, int b, String c) {
         int result = switch (c) {
             case "+" -> a + b;
             case "-" -> a - b;
@@ -66,40 +66,43 @@ public class Main {
             case "/" -> a / b;
             default -> throw new IllegalArgumentException("Неверный знак операции");
         };
-        System.out.println(result);
         return result;
     }
 
 
     public static String calc(String input) {
         //разделяем всю введенную строку на массив из 3х частей и проверяем валидность введенных данных
-        String finalString = input.trim().replaceAll("\\s+", " ");
-        char [] charArray=finalString.toCharArray();
-        for (int i=0; i<10; i++){
-            //если равно знаку дейтсвия соединяем
+        String finalString = input.trim().replaceAll("\\s+", "");
+        char[] charArray = finalString.toCharArray();
+        String fNum = "";
+        String sNum = "";
+        String operator = "";
+        for (int i = 0; i < charArray.length - 1; i++) {
+            if (charArray[i] == '+' || charArray[i] == '*' || charArray[i] == '-' || charArray[i] == '/') {
+                char[] firstNum = Arrays.copyOfRange(charArray, 0, i);
+                operator = String.valueOf(charArray[i]);
+                char[] secondNum = Arrays.copyOfRange(charArray, i + 1, charArray.length);
+                fNum = String.valueOf(firstNum);
+                sNum = String.valueOf(secondNum);
+            }
         }
-        String[] str = finalString.split(" ");
-        if (str.length != 3) {
-            throw new IllegalArgumentException("строка не соответствует требованиям");
-        }
-        //калькулятор для арабских цифр и проверка на соответствие заданию (числа должны быть от 1 до 10)
         int a;
         int b;
+        int result=0;
+        if (!isAppropriateRomanian(fNum, sNum)) {
+            a = Integer.parseInt(fNum);
+            b = Integer.parseInt(sNum);
+            if (isAppropriateArabic(a, b))
+                result = calculate(a, b, operator);
 
-        if (!isAppropriateRomanian(str[0], str[2])) {
-            a = Integer.parseInt(str[0]);
-            b = Integer.parseInt(str[2]);
+        } else if (isAppropriateRomanian(fNum, sNum)) {
+            a = convertToArabic(fNum);
+            b = convertToArabic(sNum);
+            result = calculate(a, b, operator);
+            if (result < 1) throw new IllegalArgumentException("Римские числа не могут быть отрицателными");
 
-            return String.valueOf(calculate(a,b, str[1]));
-
-        } else if (isAppropriateRomanian(str[0], str[2])) {
-            a = convertToArabic(str[0]);
-            b = convertToArabic(str[2]);
-            int result=calculate(a, b, str[1]);
-            if (result>0) {
-                return String.valueOf(result);
-            } else throw new IllegalArgumentException("Римские числа не могут быть отрицателными");
         } else throw new IllegalArgumentException("Числа не соответствуют требованиям");
-
+        System.out.println(result);
+        return String.valueOf(result);
     }
 }
