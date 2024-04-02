@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 public class Main {
@@ -15,19 +16,29 @@ public class Main {
         calc(input);
     }
 
-    public static boolean isAppropriateRomanian(char a, char b) {
-        boolean isRomanian = false;
-        if (a >= 'I' && a <= 'X' && b >= 'I' && b <= 'X') {
-            isRomanian = true;
-        } else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
-        return isRomanian;
+    public static boolean isAppropriateRomanian(String a, String b) {
+        TreeMap<String, Integer> romanianMap = new TreeMap<>();
+        romanianMap.put("I", 1);
+        romanianMap.put("II", 2);
+        romanianMap.put("III", 3);
+        romanianMap.put("IV", 4);
+        romanianMap.put("V", 5);
+        romanianMap.put("VI", 6);
+        romanianMap.put("VII", 7);
+        romanianMap.put("VIII", 8);
+        romanianMap.put("IX", 9);
+        romanianMap.put("X", 10);
+
+        return romanianMap.containsKey(a) && romanianMap.containsKey(b);
     }
 
-    public static boolean isAppropriateArabic(int a, int b) {
+    public static boolean isAppropriateArabic(String firstNum, String secondNum) {
+        int a = Integer.parseInt(firstNum);
+        int b = Integer.parseInt(secondNum);
         boolean isArabic = false;
         if (a >= 1 && a <= 10 && b >= 1 && b <= 10) {
             isArabic = true;
-        } else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
+        } //else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
         return isArabic;
     }
 
@@ -47,39 +58,48 @@ public class Main {
         };
         return arabicNum;
     }
+    public static int calculate(int a, int b, String c){
+        int result = switch (c) {
+            case "+" -> a + b;
+            case "-" -> a - b;
+            case "*" -> a * b;
+            case "/" -> a / b;
+            default -> throw new IllegalArgumentException("Неверный знак операции");
+        };
+        System.out.println(result);
+        return result;
+    }
 
 
     public static String calc(String input) {
         //разделяем всю введенную строку на массив из 3х частей и проверяем валидность введенных данных
         String finalString = input.trim().replaceAll("\\s+", " ");
+        char [] charArray=finalString.toCharArray();
+        for (int i=0; i<10; i++){
+            //если равно знаку дейтсвия соединяем
+        }
         String[] str = finalString.split(" ");
         if (str.length != 3) {
             throw new IllegalArgumentException("строка не соответствует требованиям");
         }
         //калькулятор для арабских цифр и проверка на соответствие заданию (числа должны быть от 1 до 10)
-        try {
-            int a = Integer.parseInt(str[0]);
-            int b = Integer.parseInt(str[2]);
-            if (isAppropriateArabic(a, b)) {
-                int result = switch (str[1]) {
-                    case "+" -> result = a + b;
-                    case "-" -> result = a - b;
-                    case "*" -> result = a * b;
-                    case "/" -> result = a / b;
-                    default -> throw new IllegalArgumentException("Неверный знак операции");
-                };
-                System.out.println(result);
-            } else throw new IllegalArgumentException("Числа не соответствуют требованиям");
+        int a;
+        int b;
 
-        } catch (NumberFormatException numberFormatException) {
-            System.out.println("Number format exception:" + numberFormatException.getMessage());
-        }
+        if (!isAppropriateRomanian(str[0], str[2])) {
+            a = Integer.parseInt(str[0]);
+            b = Integer.parseInt(str[2]);
 
+            return String.valueOf(calculate(a,b, str[1]));
 
-        char[] arr = finalString.toCharArray();
-        //System.out.println(arr);
-        // if (isAppropriateRomanian(arr[0], arr[4])) ;
+        } else if (isAppropriateRomanian(str[0], str[2])) {
+            a = convertToArabic(str[0]);
+            b = convertToArabic(str[2]);
+            int result=calculate(a, b, str[1]);
+            if (result>0) {
+                return String.valueOf(result);
+            } else throw new IllegalArgumentException("Римские числа не могут быть отрицателными");
+        } else throw new IllegalArgumentException("Числа не соответствуют требованиям");
 
-        return "dd";
     }
 }
