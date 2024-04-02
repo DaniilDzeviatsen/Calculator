@@ -88,14 +88,14 @@ public class Main {
         //разделяем всю введенную строку на массив из 3х частей и проверяем валидность введенных данных
         String finalString = input.trim().replaceAll("\\s+", "");
         char[] charArray = finalString.toCharArray();
-        boolean isOperatorCorrect = false;
+        int isOperatorCorrect = -1;
         for (int i = 0; i < charArray.length - 1; i++) {
 
             if (charArray[i] == '-' || charArray[i] == '+' || charArray[i] == '*' || charArray[i] == '/') {
-                isOperatorCorrect = true;
+                isOperatorCorrect++;
             }
         }
-        if (!isOperatorCorrect) throw new IllegalArgumentException("Не введен верный знак математической операции");
+        if (isOperatorCorrect!=0) throw new IllegalArgumentException("Выражение не соответствует требованиям");
         String fNum = "";
         String sNum = "";
         String operator = "";
