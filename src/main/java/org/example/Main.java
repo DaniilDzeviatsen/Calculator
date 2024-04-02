@@ -17,7 +17,7 @@ public class Main {
         calc(input);
     }
 
-    public static boolean isAppropriateRomanian(String a, String b) {
+    public static boolean isAppropriateRomanian(String a) {
         TreeMap<String, Integer> romanianMap = new TreeMap<>();
         romanianMap.put("I", 1);
         romanianMap.put("II", 2);
@@ -30,7 +30,7 @@ public class Main {
         romanianMap.put("IX", 9);
         romanianMap.put("X", 10);
 
-        return romanianMap.containsKey(a) && romanianMap.containsKey(b);
+        return romanianMap.containsKey(a);
     }
 
     public static boolean isAppropriateArabic(int a, int b) {
@@ -74,6 +74,14 @@ public class Main {
         //разделяем всю введенную строку на массив из 3х частей и проверяем валидность введенных данных
         String finalString = input.trim().replaceAll("\\s+", "");
         char[] charArray = finalString.toCharArray();
+        boolean isOperatorCorrect = false;
+        for (int i = 0; i < charArray.length - 1; i++) {
+
+            if (charArray[i] == '-' || charArray[i] == '+' || charArray[i] == '*' || charArray[i] == '/') {
+                isOperatorCorrect = true;
+            }
+        }
+        if (!isOperatorCorrect) throw new IllegalArgumentException("Не введен верный знак математической операции");
         String fNum = "";
         String sNum = "";
         String operator = "";
@@ -88,14 +96,14 @@ public class Main {
         }
         int a;
         int b;
-        int result=0;
-        if (!isAppropriateRomanian(fNum, sNum)) {
+        int result = 0;
+        if (!isAppropriateRomanian(fNum) && !isAppropriateRomanian(sNum)) {
             a = Integer.parseInt(fNum);
             b = Integer.parseInt(sNum);
             if (isAppropriateArabic(a, b))
                 result = calculate(a, b, operator);
 
-        } else if (isAppropriateRomanian(fNum, sNum)) {
+        } else if (isAppropriateRomanian(fNum) && isAppropriateRomanian(sNum)) {
             a = convertToArabic(fNum);
             b = convertToArabic(sNum);
             result = calculate(a, b, operator);
