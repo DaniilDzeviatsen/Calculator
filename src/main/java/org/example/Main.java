@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        System.out.println("Enter an arithmetic expression consisting of two numbers (Romanian or Arabic) from 1 to 10 (I to X) and an operator between them");
+        System.out.println("Введите арифметическое выражение");
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         calc(input);
@@ -37,7 +37,7 @@ public class Main {
         boolean isArabic = false;
         if (a >= 1 && a <= 10 && b >= 1 && b <= 10) {
             isArabic = true;
-        } else throw new IllegalArgumentException("Numbers should be Arabic or Romanian from 1 to 10");
+        } else throw new IllegalArgumentException("Числа должны быть арабскими или римскими от 1 до 10");
         return isArabic;
     }
 
